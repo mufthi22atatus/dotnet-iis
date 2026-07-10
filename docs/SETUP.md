@@ -25,8 +25,11 @@
 | Microsoft.AspNet.WebPages              | 3.3.0   |
 | Microsoft.AspNet.Web.Optimization      | 1.1.3   |
 | Newtonsoft.Json                        | 13.0.3  |
-| Serilog                                | 2.12.0  |
-| Serilog.Sinks.File                     | 5.0.0   |
+| Serilog                                | 4.3.1   |
+| Serilog.Extensions.Logging             | 8.0.0   |
+| Serilog.Sinks.File                     | 7.0.0   |
+| NLog                                   | 6.1.0   |
+| NLog.Extensions.Logging                | 6.1.0   |
 | System.Configuration.ConfigurationManager | 6.0.0 |
 | Antlr                                  | 3.5.0.2 |
 | WebGrease                              | 1.6.0   |
@@ -92,7 +95,16 @@ Make sure your SQL Server Express service runs as a user that owns the directory
 
 ## Logs
 
-Serilog writes to `TaskManager/Logs/taskmanager-YYYYMMDD.log` with daily rolling (14 day retention). The format is human-readable with structured properties (`{Property:j}`).
+Logging goes through `Microsoft.Extensions.Logging` (`AppLogger.Create<T>()`), backed by one of three
+providers chosen at startup via the `LOGGING_PROVIDER` environment variable:
+
+| `LOGGING_PROVIDER` value | Backend                                    | Log file                                  |
+|--------------------------|---------------------------------------------|--------------------------------------------|
+| unset / `ilogger` (default) | Built-in `SimpleFileLoggerProvider`      | `TaskManager/Logs/taskmanager-YYYYMMDD.log` |
+| `serilog`                | Serilog + `Serilog.Sinks.File`, daily rolling, 14 day retention | `TaskManager/Logs/taskmanager-YYYYMMDD.log` |
+| `nlog`                   | NLog `FileTarget`, daily archive, 14 files kept | `TaskManager/Logs/taskmanager.log` (archived to `taskmanager-YYYYMMDD.log`) |
+
+The active provider is logged on startup (`Logging provider configured: {LoggingProvider}`).
 
 Tail with PowerShell:
 ```powershell

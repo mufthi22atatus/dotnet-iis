@@ -27,6 +27,7 @@ namespace TaskManager
             
             Logger = LoggerFactory.CreateLogger<MvcApplication>();
             Logger.LogInformation("Application starting up. Env={Env}", System.Configuration.ConfigurationManager.AppSettings["Environment"] ?? "Debug");
+            Logger.LogInformation("Logging provider configured: {LoggingProvider}", LoggingConfig.ActiveProvider);
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
