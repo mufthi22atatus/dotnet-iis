@@ -1,0 +1,46 @@
+@model TaskManager.ViewModels.TaskCreateInput
+@{
+    ViewBag.Title = "New task";
+}
+<h2>New task</h2>
+@using (Html.BeginForm("Create", "Tasks", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row g-3">
+        <div class="col-md-8">
+            @Html.LabelFor(m => m.Title, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control", autofocus = "autofocus" })
+            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger small" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.Tag, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Tag, new { @class = "form-control" })
+        </div>
+        <div class="col-12">
+            @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 4 })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Priority, new { @class = "form-label" })
+            @Html.EnumDropDownListFor(m => m.Priority, new { @class = "form-select" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.DueDate, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.DueDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.EstimatedHours, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.EstimatedHours, new { @class = "form-control", type = "number", min = 0 })
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Assign to</label>
+            @Html.DropDownList("AssignedToId", ViewBag.Assignees as SelectList, "(unassigned)", new { @class = "form-select" })
+        </div>
+    </div>
+    <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a class="btn btn-link" href="@Url.Action("Index")">Cancel</a>
+    </div>
+}

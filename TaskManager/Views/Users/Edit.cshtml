@@ -1,0 +1,42 @@
+@model TaskManager.ViewModels.UserEditInput
+@{
+    ViewBag.Title = "Edit user";
+}
+<h2>Edit user</h2>
+@using (Html.BeginForm("Edit", "Users", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.FullName, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger small" })
+        </div>
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+        </div>
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.Department, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Department, new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Role, new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.Role, new SelectList(new[] { "Employee", "Manager", "Admin" }, Model.Role), new { @class = "form-select" })
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <div class="form-check">
+                @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-check-input" })
+                @Html.LabelFor(m => m.IsActive, new { @class = "form-check-label" })
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-link" href="@Url.Action("Index")">Cancel</a>
+    </div>
+}

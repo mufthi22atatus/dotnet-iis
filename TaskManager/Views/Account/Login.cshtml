@@ -1,0 +1,40 @@
+@model TaskManager.ViewModels.LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <h2>Log in</h2>
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = Model?.ReturnUrl }, FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="mb-3">
+                @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", autofocus = "autofocus", autocomplete = "username" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "current-password" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger small" })
+            </div>
+            <div class="form-check mb-3">
+                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
+                @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
+            </div>
+            <button type="submit" class="btn btn-primary">Log in</button>
+            <a href="@Url.Action("Register")" class="btn btn-link">Register</a>
+        }
+        <hr/>
+        <div class="alert alert-info small">
+            <strong>Seed accounts:</strong>
+            <ul class="mb-0">
+                <li>admin@taskmanager.local / Admin@@12345 (Admin)</li>
+                <li>manager@taskmanager.local / Manager@@12345 (Manager)</li>
+                <li>alice@taskmanager.local / Alice@@12345 (Employee)</li>
+            </ul>
+        </div>
+    </div>
+</div>

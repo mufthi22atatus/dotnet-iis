@@ -1,0 +1,39 @@
+@{
+    ViewBag.Title = "Home";
+}
+<div class="px-4 py-5 my-2 text-center">
+    <h1 class="display-5 fw-bold">Employee Task Management</h1>
+    <p class="lead text-muted">A production-shaped ASP.NET MVC 5 sample. Heartbeat: <code>@ViewBag.Heartbeat</code></p>
+    <div class="d-flex gap-2 justify-content-center mt-4">
+        <a class="btn btn-primary btn-lg" href="@Url.Action("Index", "Tasks")">Open Tasks</a>
+        <a class="btn btn-outline-secondary btn-lg" href="@Url.Action("Index", "Dashboard")">Dashboard</a>
+        <a class="btn btn-outline-dark btn-lg" href="@Url.Action("About", "Home")">About</a>
+    </div>
+</div>
+
+<div class="row g-4 mt-3">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">CRUD</h5>
+                <p class="card-text">Create, edit, assign, and delete tasks. Backed by EF6 + SQL Server.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">REST API</h5>
+                <p class="card-text"><code>/api/tasks</code>, <code>/api/users</code>, <code>/api/external/weather</code>.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Telemetry-rich</h5>
+                <p class="card-text">DB, HTTP, file I/O, jobs, modules, exceptions all wired for APM.</p>
+            </div>
+        </div>
+    </div>
+</div>

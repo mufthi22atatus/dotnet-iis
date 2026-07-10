@@ -1,0 +1,21 @@
+@{
+    ViewBag.Title = "External Request Result";
+}
+
+<div class="mb-3">
+    <a href="@Url.Action("Index", "Diagnostics")" class="btn btn-sm btn-outline-secondary">&larr; Back to Diagnostics</a>
+</div>
+
+<div class="alert alert-info">
+    <strong>Result:</strong> @ViewBag.Message
+</div>
+
+@if (ViewBag.ResponseBody != null)
+{
+    <div class="card">
+        <div class="card-header">Response Body</div>
+        <div class="card-body">
+            <pre class="mb-0" style="max-height: 400px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">@ViewBag.ResponseBody</pre>
+        </div>
+    </div>
+}

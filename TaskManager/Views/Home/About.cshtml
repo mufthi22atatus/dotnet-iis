@@ -1,0 +1,25 @@
+@{
+    ViewBag.Title = "About";
+}
+<h1>About TaskManager</h1>
+<p class="lead">A purposely-multi-feature ASP.NET MVC 5 / .NET Framework 4.8 sample.</p>
+
+<h4>Stack</h4>
+<ul>
+    <li>ASP.NET MVC 5.2.9, Web API 2, Razor 3.2</li>
+    <li>.NET Framework 4.8</li>
+    <li>Entity Framework 6.4 (Code First)</li>
+    <li>SQL Server LocalDB / SQL Server Express</li>
+    <li>Serilog (file rolling)</li>
+    <li>Bootstrap 5 + jQuery 3.7</li>
+</ul>
+
+<h4>Telemetry surfaces</h4>
+<ul>
+    <li>DB spans on every list/detail/create/update/delete</li>
+    <li>External HTTP spans on the Dashboard (open-meteo) and <code>/api/external/*</code></li>
+    <li>File I/O spans on uploads + cleanup job CSV writes</li>
+    <li>Background job ticks every minute (reminders) and every 5 minutes (cleanup)</li>
+    <li>HTTP module spans for every IIS request, plus correlation header <code>X-Request-Id</code></li>
+    <li>Exception traces from <code>/Home/Boom</code> and middleware/filter pipelines</li>
+</ul>

@@ -1,0 +1,102 @@
+@model TaskManager.ViewModels.DashboardViewModel
+@{
+    ViewBag.Title = "Dashboard";
+    var weather = ViewBag.Weather as TaskManager.Services.WeatherSnapshot;
+}
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <div>
+        <h2 class="mb-0">Dashboard</h2>
+        <small class="text-muted">Generated @Model.GeneratedAtUtc.ToString("yyyy-MM-dd HH:mm:ss") UTC (cached up to 30s)</small>
+    </div>
+    @if (weather != null)
+    {
+        <div class="text-end">
+            <div class="small text-muted">Chennai weather (open-meteo)</div>
+            <div><strong>@weather.TemperatureC.ToString("0.#")°C</strong> &middot; wind @weather.WindKph.ToString("0.#") km/h</div>
+        </div>
+    }
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card text-bg-light"><div class="card-body">
+            <div class="small text-muted">Total</div>
+            <div class="display-6">@Model.Total</div>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-light"><div class="card-body">
+            <div class="small text-muted">Open / In progress</div>
+            <div class="display-6">@Model.Open / @Model.InProgress</div>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-light"><div class="card-body">
+            <div class="small text-muted">Done</div>
+            <div class="display-6">@Model.Done</div>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card @(Model.Overdue > 0 ? "text-bg-danger" : "text-bg-light")"><div class="card-body">
+            <div class="small">Overdue</div>
+            <div class="display-6">@Model.Overdue</div>
+        </div></div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card"><div class="card-body">
+            <h5>By status</h5>
+            <ul class="list-group list-group-flush">
+                @foreach (var c in Model.ByStatus)
+                {
+                    <li class="list-group-item d-flex justify-content-between"><span>@c.Bucket</span><strong>@c.Count</strong></li>
+                }
+            </ul>
+        </div></div>
+    </div>
+    <div class="col-md-6">
+        <div class="card"><div class="card-body">
+            <h5>By priority</h5>
+            <ul class="list-group list-group-flush">
+                @foreach (var c in Model.ByPriority)
+                {
+                    <li class="list-group-item d-flex justify-content-between"><span>@c.Bucket</span><strong>@c.Count</strong></li>
+                }
+            </ul>
+        </div></div>
+    </div>
+</div>
+
+<h5 class="mt-4">Recent updates</h5>
+<table class="table">
+    <thead><tr><th>Title</th><th>Status</th><th>Priority</th><th>Assignee</th><th>Updated</th></tr></thead>
+    <tbody>
+        @foreach (var r in Model.Recent)
+        {
+            <tr>
+                <td><a href="@Url.Action("Details", "Tasks", new { id = r.Id })">@r.Title</a></td>
+                <td>@Html.StatusBadge(r.Status)</td>
+                <td>@Html.PriorityBadge(r.Priority)</td>
+                <td>@(r.AssignedTo ?? "—")</td>
+                <td class="text-muted small">@r.UpdatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+<script>
+    // Simple AJAX poll demoing fetch against the Web API and rendering live status.
+    (function () {
+        async function refresh() {
+            try {
+                const res = await fetch('@Url.Action("List", "Tasks")?includeDone=false', { headers: { 'Accept': 'text/html' } });
+                console.log('refresh status', res.status);
+            } catch (e) { console.warn(e); }
+        }
+        // setInterval(refresh, 30000); // uncomment to see periodic background fetches
+    })();
+</script>
+}

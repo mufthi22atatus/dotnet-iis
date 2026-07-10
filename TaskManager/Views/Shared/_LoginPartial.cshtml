@@ -1,0 +1,22 @@
+@if (Request.IsAuthenticated)
+{
+    <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+            <span class="nav-link disabled">@User.Identity.Name (@(HttpContext.Current.Items["UserRole"] as string))</span>
+        </li>
+        <li class="nav-item">
+            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "d-inline" }))
+            {
+                @Html.AntiForgeryToken()
+                <button class="btn btn-outline-light btn-sm" type="submit">Log out</button>
+            }
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="@Url.Action("Login", "Account")">Log in</a></li>
+        <li class="nav-item"><a class="nav-link" href="@Url.Action("Register", "Account")">Register</a></li>
+    </ul>
+}

@@ -1,0 +1,55 @@
+@model IEnumerable<TaskManager.Data.Entities.Employee>
+@{
+    ViewBag.Title = "Users";
+}
+<h2>Users</h2>
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Role</th>
+                <th>Active</th>
+                <th>Last login</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in Model)
+            {
+                <tr>
+                    <td>@u.FullName</td>
+                    <td>@u.Email</td>
+                    <td>@u.Department</td>
+                    <td><span class="badge bg-secondary">@u.Role</span></td>
+                    <td>
+                        @if (u.IsActive)
+                        {
+                            <span class="badge bg-success">yes</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">no</span>
+                        }
+                    </td>
+                    <td class="text-muted small">@(u.LastLoginAt?.ToString("yyyy-MM-dd HH:mm") ?? "—")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Edit", new { id = u.Id })">Edit</a>
+                        @if (u.IsActive)
+                        {
+                            using (Html.BeginForm("Disable", "Users", new { id = u.Id }, FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Disable @u.FullName?');"
+                                        type="submit">Disable</button>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

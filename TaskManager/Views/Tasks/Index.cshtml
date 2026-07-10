@@ -1,0 +1,59 @@
+@model IEnumerable<TaskManager.Data.Entities.TaskItem>
+@{
+    ViewBag.Title = "Tasks";
+    var includeDone = (bool)(ViewBag.IncludeDone ?? false);
+    var isManager = (bool)(ViewBag.IsManager ?? false);
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Tasks @(isManager ? "(all)" : "(yours)")</h2>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary btn-sm" href="@Url.Action("Index", new { includeDone = !includeDone })">
+            @(includeDone ? "Hide done/cancelled" : "Show done/cancelled")
+        </a>
+        <a class="btn btn-primary btn-sm" href="@Url.Action("Create")">+ New task</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Assignee</th>
+                <th>Due</th>
+                <th>Updated</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("Details", new { id = t.Id })" class="text-decoration-none">
+                            <strong>@t.Title</strong>
+                        </a>
+                        @if (!string.IsNullOrEmpty(t.Tag))
+                        {
+                            <span class="badge bg-light text-dark border ms-2">@t.Tag</span>
+                        }
+                    </td>
+                    <td>@Html.StatusBadge(t.Status)</td>
+                    <td>@Html.PriorityBadge(t.Priority)</td>
+                    <td>@(t.AssignedTo?.FullName ?? "Unassigned")</td>
+                    <td>@(t.DueDate?.ToString("yyyy-MM-dd") ?? "—")</td>
+                    <td class="text-muted small">@t.UpdatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Edit", new { id = t.Id })">Edit</a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="7" class="text-center text-muted py-4">No tasks. Go make some.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

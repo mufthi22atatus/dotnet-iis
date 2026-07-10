@@ -1,0 +1,110 @@
+@model TaskManager.Data.Entities.TaskItem
+@{
+    ViewBag.Title = Model.Title;
+}
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h2 class="mb-1">@Model.Title</h2>
+        <div class="text-muted small">
+            Created by @Model.CreatedBy?.FullName on @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+            &middot; Last updated @Model.UpdatedAt.ToString("yyyy-MM-dd HH:mm")
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        @Html.StatusBadge(Model.Status)
+        @Html.PriorityBadge(Model.Priority)
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Description</h5>
+                <p class="mb-0" style="white-space:pre-wrap">@(string.IsNullOrWhiteSpace(Model.Description) ? "—" : Model.Description)</p>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Attachments</h5>
+                @if (!Model.Attachments.Any())
+                {
+                    <p class="text-muted">No attachments yet.</p>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush mb-3">
+                        @foreach (var a in Model.Attachments.OrderByDescending(x => x.UploadedAt))
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>
+                                    <a href="@Url.Action("DownloadAttachment", new { attachmentId = a.Id })">@a.FileName</a>
+                                    <small class="text-muted">(@(a.SizeBytes / 1024) KB &middot; @a.UploadedBy?.FullName)</small>
+                                </span>
+                                <small class="text-muted">@a.UploadedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                            </li>
+                        }
+                    </ul>
+                }
+
+                @using (Html.BeginForm("Upload", "Tasks", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="input-group">
+                        <input type="file" name="file" class="form-control" required="required" />
+                        <button class="btn btn-outline-primary" type="submit">Upload</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Details</h5>
+                <dl class="row mb-0">
+                    <dt class="col-5">Assignee</dt><dd class="col-7">@(Model.AssignedTo?.FullName ?? "—")</dd>
+                    <dt class="col-5">Tag</dt><dd class="col-7">@(Model.Tag ?? "—")</dd>
+                    <dt class="col-5">Due</dt><dd class="col-7">@(Model.DueDate?.ToString("yyyy-MM-dd") ?? "—")</dd>
+                    <dt class="col-5">Estimated</dt><dd class="col-7">@Model.EstimatedHours h</dd>
+                    <dt class="col-5">Logged</dt><dd class="col-7">@Model.LoggedHours h</dd>
+                    <dt class="col-5">Completed</dt><dd class="col-7">@(Model.CompletedAt?.ToString("yyyy-MM-dd HH:mm") ?? "—")</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Quick actions</h5>
+                @using (Html.BeginForm("ChangeStatus", "Tasks", new { id = Model.Id }, FormMethod.Post, new { @class = "d-flex gap-2" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <select name="status" class="form-select form-select-sm">
+                        @foreach (TaskManager.Data.Entities.TaskStatus s in Enum.GetValues(typeof(TaskManager.Data.Entities.TaskStatus)))
+                        {
+                            if (s == Model.Status)
+                            {
+                                <option value="@s" selected="selected">@s</option>
+                            }
+                            else
+                            {
+                                <option value="@s">@s</option>
+                            }
+                        }
+                    </select>
+                    <button class="btn btn-sm btn-outline-primary" type="submit">Set</button>
+                }
+                <hr />
+                <a class="btn btn-sm btn-outline-secondary w-100 mb-2" href="@Url.Action("Edit", new { id = Model.Id })">Edit task</a>
+                @using (Html.BeginForm("Delete", "Tasks", new { id = Model.Id }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-sm btn-outline-danger w-100" type="submit"
+                            onclick="return confirm('Delete this task?');">Delete task</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

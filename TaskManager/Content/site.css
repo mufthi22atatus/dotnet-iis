@@ -1,0 +1,10 @@
+/* Local overrides — bootstrap.css comes from the NuGet package */
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card.text-bg-light .display-6 { font-weight: 600; }
+.navbar .nav-link.disabled { color: #cbd3da !important; }

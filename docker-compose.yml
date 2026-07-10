@@ -1,0 +1,38 @@
+# ============================================================================
+# Docker Compose — SQL Server 2022 for TaskManager
+# ============================================================================
+# The application runs locally on .NET Framework 4.8 (IIS Express / Visual Studio).
+# Only SQL Server runs in Docker as the database backend.
+#
+# Usage:
+#   docker-compose up -d          # Start SQL Server
+#   docker-compose down           # Stop SQL Server
+#   docker-compose down -v        # Stop + remove data volume (full reset)
+# ============================================================================
+
+version: "3.8"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: taskmanager-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "TaskMgr@2024!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+      - ./db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "TaskMgr@2024!" -Q "SELECT 1" -C -b
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  sqlserver-data:
+    driver: local

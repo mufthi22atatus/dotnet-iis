@@ -1,0 +1,11 @@
+@{
+    ViewBag.Title = "Diagnostics Result";
+}
+
+<div class="mb-3">
+    <a href="@Url.Action("Index", "Diagnostics")" class="btn btn-sm btn-outline-secondary">&larr; Back to Diagnostics</a>
+</div>
+
+<div class="alert alert-success">
+    <strong>Result:</strong> @ViewBag.Message
+</div>

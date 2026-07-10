@@ -1,0 +1,91 @@
+@{
+    ViewBag.Title = "Diagnostics";
+}
+
+<div class="mb-4">
+    <h2>APM Diagnostics</h2>
+    <p class="text-muted">Use these endpoints to generate telemetry for your APM dashboard — errors, exceptions, slow responses, and external HTTP calls.</p>
+</div>
+
+<!-- Error Routes -->
+<div class="card mb-4">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">Error Routes</h5>
+    </div>
+    <div class="card-body">
+        <p class="text-muted small">Click to trigger HTTP error responses. These generate error-rate metrics in your APM.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="@Url.Action("Error400", "Diagnostics")" class="btn btn-outline-warning">400 Bad Request</a>
+            <a href="@Url.Action("Error403", "Diagnostics")" class="btn btn-outline-warning">403 Forbidden</a>
+            <a href="@Url.Action("Error404", "Diagnostics")" class="btn btn-outline-warning">404 Not Found</a>
+            <a href="@Url.Action("Error500", "Diagnostics")" class="btn btn-outline-danger">500 Server Error</a>
+        </div>
+    </div>
+</div>
+
+<!-- Failure Rate Simulation -->
+<div class="card mb-4">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">Failure-Rate Simulation</h5>
+    </div>
+    <div class="card-body">
+        <p class="text-muted small">Randomly succeeds or fails based on the configured percentage — ideal for testing error-rate alerting.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="@Url.Action("RandomFailure", "Diagnostics", new { failPercent = 25 })" class="btn btn-outline-success">25% fail rate</a>
+            <a href="@Url.Action("RandomFailure", "Diagnostics", new { failPercent = 50 })" class="btn btn-outline-warning">50% fail rate</a>
+            <a href="@Url.Action("RandomFailure", "Diagnostics", new { failPercent = 75 })" class="btn btn-outline-danger">75% fail rate</a>
+            <a href="@Url.Action("RandomFailure", "Diagnostics", new { failPercent = 100 })" class="btn btn-danger">100% fail rate</a>
+        </div>
+    </div>
+</div>
+
+<!-- Exception Types -->
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Exceptions</h5>
+    </div>
+    <div class="card-body">
+        <p class="text-muted small">Trigger specific exception types to see them captured in your APM exceptions view.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="@Url.Action("NullRef", "Diagnostics")" class="btn btn-outline-dark">NullReferenceException</a>
+            <a href="@Url.Action("ArgError", "Diagnostics")" class="btn btn-outline-dark">ArgumentException</a>
+            <a href="@Url.Action("DivideByZero", "Diagnostics")" class="btn btn-outline-dark">DivideByZeroException</a>
+            <a href="@Url.Action("Timeout", "Diagnostics")" class="btn btn-outline-dark">TimeoutException</a>
+            <a href="@Url.Action("Unauthorized", "Diagnostics")" class="btn btn-outline-dark">UnauthorizedAccessException</a>
+            <a href="@Url.Action("NestedError", "Diagnostics")" class="btn btn-outline-dark">Nested Exception</a>
+        </div>
+    </div>
+</div>
+
+<!-- Slow Responses -->
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Slow Responses</h5>
+    </div>
+    <div class="card-body">
+        <p class="text-muted small">Simulate slow server responses to observe latency distributions in your APM.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="@Url.Action("SlowResponse", "Diagnostics", new { delayMs = 1000 })" class="btn btn-outline-info">1s delay</a>
+            <a href="@Url.Action("SlowResponse", "Diagnostics", new { delayMs = 3000 })" class="btn btn-outline-info">3s delay</a>
+            <a href="@Url.Action("SlowResponse", "Diagnostics", new { delayMs = 5000 })" class="btn btn-outline-info">5s delay</a>
+            <a href="@Url.Action("SlowResponse", "Diagnostics", new { delayMs = 10000 })" class="btn btn-outline-info">10s delay</a>
+        </div>
+    </div>
+</div>
+
+<!-- External Requests -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">External HTTP Requests</h5>
+    </div>
+    <div class="card-body">
+        <p class="text-muted small">Trigger outbound HTTP calls to third-party APIs. These generate external-service spans in your APM.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="@Url.Action("ExternalWeather", "Diagnostics")" class="btn btn-outline-primary">Weather API (open-meteo)</a>
+            <a href="@Url.Action("ExternalGitHub", "Diagnostics")" class="btn btn-outline-primary">GitHub API (dotnet/runtime)</a>
+            <a href="@Url.Action("ExternalJsonPlaceholder", "Diagnostics")" class="btn btn-outline-primary">JSONPlaceholder</a>
+            <a href="@Url.Action("ExternalHttpBin", "Diagnostics")" class="btn btn-outline-primary">httpbin.org (2s delay)</a>
+            <a href="@Url.Action("ExternalFailing", "Diagnostics")" class="btn btn-danger">Failing External Call</a>
+        </div>
+    </div>
+</div>
