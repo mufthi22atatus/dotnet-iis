@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using NLog.Targets;
 using Serilog;
+using Atatus.Serilog.Sinks;
 
 namespace TaskManager
 {
@@ -69,6 +70,9 @@ namespace TaskManager
                     rollingInterval: RollingInterval.Day,
                     retainedFileCountLimit: 14,
                     outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}")
+                // Ships every log line straight to Atatus (Atatus.Serilog.Sinks). No licenseKey/appName/endpoint
+                // given here so it falls back to the profiler-instrumented Atatus .NET agent's own configuration.
+                .WriteTo.Atatus()
                 .CreateLogger();
 
             builder.AddSerilog(serilogLogger, dispose: true);
@@ -90,6 +94,10 @@ namespace TaskManager
             };
 
             nlogConfig.AddRule(NLog.LogLevel.Debug, NLog.LogLevel.Fatal, fileTarget);
+
+            // Ships every log line straight to Atatus (Atatus.NLog.Targets). No config given here so it
+            // falls back to the profiler-instrumented Atatus .NET agent's own configuration.
+            nlogConfig.AddRuleForAllLevels(new AtatusTarget());
 
             builder.AddNLog(nlogConfig);
         }

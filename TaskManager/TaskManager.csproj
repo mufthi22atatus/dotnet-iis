@@ -255,6 +255,15 @@
     <Reference Include="NLog.Extensions.Logging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.Extensions.Logging.6.1.0\lib\net462\NLog.Extensions.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="Atatus, Version=3.2.0.0, Culture=neutral, PublicKeyToken=429f11613e2ffbc7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Atatus.3.2.2\lib\net472\Atatus.dll</HintPath>
+    </Reference>
+    <Reference Include="Atatus.Serilog.Sinks, Version=1.0.0.0, Culture=neutral, PublicKeyToken=069ca2728db333c1, processorArchitecture=MSIL">
+      <HintPath>..\packages\Atatus.Serilog.Sinks.1.0.0\lib\netstandard2.0\Atatus.Serilog.Sinks.dll</HintPath>
+    </Reference>
+    <Reference Include="Atatus.NLog.Targets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=069ca2728db333c1, processorArchitecture=MSIL">
+      <HintPath>..\packages\Atatus.NLog.Targets.1.0.0\lib\netstandard2.0\Atatus.NLog.Targets.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
