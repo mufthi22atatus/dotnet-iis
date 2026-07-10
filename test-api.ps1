@@ -19,7 +19,7 @@ $cookies = $session.Cookies.GetCookies($base) | Select-Object Name
 Write-Host "  Cookies: $($cookies.Name -join ', ')"
 
 # Step 3: Test API endpoints
-Write-Host "`n[3] Testing API endpoints..." -ForegroundColor Yellow
+Write-Host "`n[3] Testing API endpoints..." -ForegroundColor Yellow 
 $endpoints = @(
     @{ Method="GET";  Url="$base/api/tasks" }
     @{ Method="GET";  Url="$base/api/users" }
